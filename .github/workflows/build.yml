@@ -10,15 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
+      # Latest Flutter version use karege jo sabhi Java versions ke sath compatible hai
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.x'
+          flutter-version: '3.22.x'
           channel: 'stable'
       
       - run: flutter create . --org com.pcshare --project-name pc_share_app
-      
-      # Yeh command Java aur Gradle version mismatch ko fix kar degi
-      - run: cd android && ./gradlew wrapper --gradle-version 8.4 && cd ..
       
       - run: flutter pub get
       - run: flutter build apk --release
