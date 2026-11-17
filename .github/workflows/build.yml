@@ -1,3 +1,5 @@
+
+
 name: Build Flutter APK
 
 on:
@@ -10,7 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      # Latest Flutter version use karege jo sabhi Java versions ke sath compatible hai
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.x'
@@ -18,6 +19,18 @@ jobs:
       
       - run: flutter create . --org com.pcshare --project-name pc_share_app
       
+      # Yahan hum gradle version ko properly update karke lock kar rahe hain
+      - name: Update Gradle Version for Java 21
+        run: |
+          PROPS="android/gradle/wrapper/gradle-wrapper.properties"
+          echo "distributionBase=GRADLE_USER_HOME" > $PROPS
+          echo "distributionPath=wrapper/dists" >> $PROPS
+          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-8.8-all.zip" >> $PROPS
+          echo "networkTimeout=10000" >> $PROPS
+          echo "validateDistributionUrl=true" >> $PROPS
+          echo "zipStoreBase=GRADLE_USER_HOME" >> $PROPS
+          echo "zipStorePath=wrapper/dists" >> $PROPS
+
       - run: flutter pub get
       - run: flutter build apk --release
       
