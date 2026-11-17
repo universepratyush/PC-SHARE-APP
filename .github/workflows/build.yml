@@ -15,8 +15,10 @@ jobs:
           flutter-version: '3.19.x'
           channel: 'stable'
       
-      # Yeh command automatic ek proper Flutter project khadi kar degi
       - run: flutter create . --org com.pcshare --project-name pc_share_app
+      
+      # Yeh command Java aur Gradle version mismatch ko fix kar degi
+      - run: cd android && ./gradlew wrapper --gradle-version 8.4 && cd ..
       
       - run: flutter pub get
       - run: flutter build apk --release
