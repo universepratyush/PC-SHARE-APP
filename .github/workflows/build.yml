@@ -1,5 +1,4 @@
 
-
 name: Build Flutter APK
 
 on:
@@ -12,6 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      # Sabse pehle Java 17 set kar rahe hain taaki version clash khatam ho jaye
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.x'
@@ -19,18 +25,6 @@ jobs:
       
       - run: flutter create . --org com.pcshare --project-name pc_share_app
       
-      # Yahan hum gradle version ko properly update karke lock kar rahe hain
-      - name: Update Gradle Version for Java 21
-        run: |
-          PROPS="android/gradle/wrapper/gradle-wrapper.properties"
-          echo "distributionBase=GRADLE_USER_HOME" > $PROPS
-          echo "distributionPath=wrapper/dists" >> $PROPS
-          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-8.8-all.zip" >> $PROPS
-          echo "networkTimeout=10000" >> $PROPS
-          echo "validateDistributionUrl=true" >> $PROPS
-          echo "zipStoreBase=GRADLE_USER_HOME" >> $PROPS
-          echo "zipStorePath=wrapper/dists" >> $PROPS
-
       - run: flutter pub get
       - run: flutter build apk --release
       
